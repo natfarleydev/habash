@@ -1,0 +1,58 @@
+#!/usr/bin/bash
+
+function helpme {
+    echo "Welcome to Habash!"
+    echo ""
+    echo "This is a very basic bash script to ease contacting Habitica on the command line. It is essentially a basic wrapper around curl, with some extra commands for ease of use."
+    echo ""
+    echo "Available commands:"
+    echo "habash getidoftask TASK_TEXT"
+    echo "habash uptask TASK_TEXT"
+    echo "habash downtask TASK_TEXT"
+    echo "habash post API_PATH [CURL_ARGUMENTS]"
+    echo "habash get API_PATH [CURL_ARGUMENTS]"
+    echo ""
+    echo ""
+    echo "WARNING:"
+    echo "This script does not check inputs; if you do something like \"habash rm -rf *\", this script will execute \"rm -rf *\". You have been warned!"
+}
+
+# Basic commands
+#
+# These commands should be used to create more complex commands. They are left
+# available to the user to do complex things with the api
+function hcurl {
+    # Basic curl wrapper for habitica
+    curl -s -X $1 -H "x-api-key: $HABITICA_TOKEN" -H "x-api-user: $HABITICA_UUID" https://habitica.com/api/v2/$2
+}
+
+function get {
+    hcurl GET $1
+}
+
+function post {
+    hcurl POST $1
+}
+
+# End of basic commands
+
+# Composite commands
+#
+# These commands are for convenience. They should use the basic commands above
+# as much as possible.
+
+function getidoftask {
+    # TODO get this to return just the id or a failed flag
+    get user/tasks | grep -Po '"text":.*?"id":.*?,' | grep "$*" | grep -Po '"id":".*?"' | grep -Po '[-a-f0-9]{36}'
+}
+
+function uptask {
+    post /user/tasks/$(getidoftask $*)/up
+}
+
+function downtask {
+    post /user/tasks/$(getidoftask $*)/down
+}
+
+# No error checking here, use responsibly!
+$@
