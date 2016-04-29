@@ -46,12 +46,16 @@ function getidoftask {
     get user/tasks | grep -Po '"text":.*?"id":.*?,' | grep "$*" | grep -Po '"id":".*?"' | grep -Po '[-a-f0-9]{36}'
 }
 
-function uptask {
+function up {
     post /user/tasks/$(getidoftask $*)/up
 }
 
-function downtask {
+function down {
     post /user/tasks/$(getidoftask $*)/down
+}
+
+function createtodo {
+    curl -H "x-api-key: $HABITICA_TOKEN" -H "x-api-user: $HABITICA_UUID" -H "Content-Type: application/json" -X POST -d "{\"text\": \"$*\", \"type\": \"todo\"}" https://habitica.com/api/v2/user/tasks
 }
 
 # No error checking here, use responsibly!
