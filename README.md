@@ -3,7 +3,7 @@ A (very minimal) habitica terminal client written entirely in bash.
 
 It requires the `$HABITICA_TOKEN` and `$HABITICA_UUID` to be set in the environment.
 
-WARNING: This script does not have any checks in it for accidental deletion of tasks etc., so if you don't script, don't use it! 
+WARNING: This script does not have any checks in it for accidental deletion of tasks etc., so if you don't understand how this script works, don't use it! 
 
 Usage is simple:
 
