@@ -24,7 +24,7 @@ function helpme {
 # available to the user to do complex things with the api
 function hcurl {
     # Basic curl wrapper for habitica
-    curl -s -X $1 -H "x-api-key: $HABITICA_TOKEN" -H "x-api-user: $HABITICA_UUID" https://habitica.com/api/v2/$2
+    curl -s -X $1 -H "x-api-key: $HABITICA_TOKEN" -H "x-api-user: $HABITICA_UUID" https://habitica.com/api/v3/$2
 }
 
 function get {
@@ -44,19 +44,23 @@ function post {
 
 function getidoftask {
     # TODO get this to return just the id or a failed flag
-    get user/tasks | grep -Po '"text":.*?"id":.*?,' | grep "$*" | grep -Po '"id":".*?"' | grep -Po '[-a-f0-9]{36}'
+    get tasks/user | grep -Po '"text":.*?"id":.*?,' | grep "$*" | grep -Po '"id":".*?"' | grep -Po '[-a-f0-9]{36}'
 }
 
 function up {
-    post /user/tasks/$(getidoftask $*)/up
+    post /tasks/$(getidoftask $*)/score/up
 }
 
 function down {
-    post /user/tasks/$(getidoftask $*)/down
+    post /tasks/$(getidoftask $*)/score/down
 }
 
 function createtodo {
-    curl -H "x-api-key: $HABITICA_TOKEN" -H "x-api-user: $HABITICA_UUID" -H "Content-Type: application/json" -X POST -d "{\"text\": \"$*\", \"type\": \"todo\"}" https://habitica.com/api/v2/user/tasks
+    curl -s -H "x-api-key: $HABITICA_TOKEN" -H "x-api-user: $HABITICA_UUID" -H "Content-Type: application/json" -X POST -d "{\"text\": \"$*\", \"type\": \"todo\"}" https://habitica.com/api/v3/tasks/user
+}
+
+function createhabit {
+    curl -s -H "x-api-key: $HABITICA_TOKEN" -H "x-api-user: $HABITICA_UUID" -H "Content-Type: application/json" -X POST -d "{\"text\": \"$*\", \"type\": \"habit\"}" https://habitica.com/api/v3/tasks/user
 }
 
 # No error checking here, use responsibly!
