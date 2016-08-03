@@ -21,6 +21,8 @@ habash createtodo TASK_TEXT
 habash createhabit TASK_TEXT
 habash post API_PATH [CURL_ARGUMENTS]
 habash get API_PATH [CURL_ARGUMENTS]
+habash put API_PATH [CURL_ARGUMENTS]
+habash del API_PATH [CURL_ARGUMENTS]
 
 
 WARNING:
