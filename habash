@@ -35,6 +35,14 @@ function post {
     hcurl POST $1
 }
 
+function put {
+    hcurl PUT $1
+}
+
+function del {
+    hcurl DELETE $1
+}
+
 # End of basic commands
 
 # Composite commands
