@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 
 function helpme {
     echo "Welcome to Habash!"
@@ -10,8 +10,8 @@ function helpme {
     echo "habash up TASK_TEXT"
     echo "habash down TASK_TEXT"
     echo "habash createtodo TASK_TEXT"
-    echo "habash post API_PATH [CURL_ARGUMENTS]"
-    echo "habash get API_PATH [CURL_ARGUMENTS]"
+    # echo "habash post API_PATH [CURL_ARGUMENTS]"
+    # echo "habash get API_PATH [CURL_ARGUMENTS]"
     echo ""
     echo ""
     echo "WARNING:"
@@ -50,26 +50,27 @@ function del {
 # These commands are for convenience. They should use the basic commands above
 # as much as possible.
 
-function getidoftask {
+function habash_getidoftask {
     # TODO get this to return just the id or a failed flag
     get tasks/user | grep -Po '"text":.*?"id":.*?,' | grep "$*" | grep -Po '"id":".*?"' | grep -Po '[-a-f0-9]{36}'
 }
 
-function up {
-    post /tasks/$(getidoftask $*)/score/up
+function habash_up {
+    post /tasks/$(habash_getidoftask $*)/score/up
 }
 
-function down {
-    post /tasks/$(getidoftask $*)/score/down
+function habash_down {
+    post /tasks/$(ghabash_etidoftask $*)/score/down
 }
 
-function createtodo {
+function habash_createtodo {
     curl -s -H "x-api-key: $HABITICA_TOKEN" -H "x-api-user: $HABITICA_UUID" -H "Content-Type: application/json" -X POST -d "{\"text\": \"$*\", \"type\": \"todo\"}" https://habitica.com/api/v3/tasks/user
 }
 
-function createhabit {
+function habash_createhabit {
     curl -s -H "x-api-key: $HABITICA_TOKEN" -H "x-api-user: $HABITICA_UUID" -H "Content-Type: application/json" -X POST -d "{\"text\": \"$*\", \"type\": \"habit\"}" https://habitica.com/api/v3/tasks/user
 }
 
-# No error checking here, use responsibly!
-$@
+action=$1
+shift
+habash_${action} $@ 2>/dev/null ||echo "$action is not a valid action"
