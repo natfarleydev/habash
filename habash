@@ -24,7 +24,11 @@ function helpme {
 # available to the user to do complex things with the api
 function hcurl {
     # Basic curl wrapper for habitica
-    curl -s -X $1 -H "x-api-key: $HABITICA_TOKEN" -H "x-api-user: $HABITICA_UUID" https://habitica.com/api/v3/$2
+    if [ $# -eq 3 ];then
+        curl -s -X $1 -H "x-api-key: $HABITICA_TOKEN" -H "x-api-user: $HABITICA_UUID" https://habitica.com/api/v3/$2
+    else
+        curl -s -X $1 -H "x-api-key: $HABITICA_TOKEN" -H "x-api-user: $HABITICA_UUID" https://habitica.com/api/v3/$2 -d "$3"
+    fi
 }
 
 function get {
@@ -69,6 +73,14 @@ function habash_createtodo {
 
 function habash_createhabit {
     curl -s -H "x-api-key: $HABITICA_TOKEN" -H "x-api-user: $HABITICA_UUID" -H "Content-Type: application/json" -X POST -d "{\"text\": \"$*\", \"type\": \"habit\"}" https://habitica.com/api/v3/tasks/user
+}
+
+function habash_cast {
+    post /user/class/cast/$*
+}
+
+function habash_status {
+    get /user
 }
 
 action=$1
