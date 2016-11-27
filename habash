@@ -24,27 +24,26 @@ function helpme {
 # available to the user to do complex things with the api
 function hcurl {
     # Basic curl wrapper for habitica
-    if [ $# -eq 3 ];then
-        curl -s -X $1 -H "x-api-key: $HABITICA_TOKEN" -H "x-api-user: $HABITICA_UUID" https://habitica.com/api/v3/$2
-    else
-        curl -s -X $1 -H "x-api-key: $HABITICA_TOKEN" -H "x-api-user: $HABITICA_UUID" https://habitica.com/api/v3/$2 -d "$3"
-    fi
+    local method=$1
+    local url=$2
+    shift;shift
+    curl -s -X $method -H "x-api-key: $HABITICA_TOKEN" -H "x-api-user: $HABITICA_UUID" -H "Content-Type: application/json" https://habitica.com/api/v3/$url "$@"
 }
 
 function get {
-    hcurl GET $1
+    hcurl GET "$@"
 }
 
 function post {
-    hcurl POST $1
+    hcurl POST "$@"
 }
 
 function put {
-    hcurl PUT $1
+    hcurl PUT "$@"
 }
 
 function del {
-    hcurl DELETE $1
+    hcurl DELETE "$@"
 }
 
 # End of basic commands
@@ -68,11 +67,14 @@ function habash_down {
 }
 
 function habash_createtodo {
-    curl -s -H "x-api-key: $HABITICA_TOKEN" -H "x-api-user: $HABITICA_UUID" -H "Content-Type: application/json" -X POST -d "{\"text\": \"$*\", \"type\": \"todo\"}" https://habitica.com/api/v3/tasks/user
+    # curl -s -H "x-api-key: $HABITICA_TOKEN" -H "x-api-user: $HABITICA_UUID" -H "Content-Type: application/json" -X POST -d "{\"text\": \"$*\", \"type\": \"todo\"}" https://habitica.com/api/v3/tasks/user
+
+    post /tasks/user -d "{\"text\": \"$*\", \"type\": \"todo\"}"
 }
 
 function habash_createhabit {
-    curl -s -H "x-api-key: $HABITICA_TOKEN" -H "x-api-user: $HABITICA_UUID" -H "Content-Type: application/json" -X POST -d "{\"text\": \"$*\", \"type\": \"habit\"}" https://habitica.com/api/v3/tasks/user
+    # curl -s -H "x-api-key: $HABITICA_TOKEN" -H "x-api-user: $HABITICA_UUID" -H "Content-Type: application/json" -X POST -d "{\"text\": \"$*\", \"type\": \"habit\"}" https://habitica.com/api/v3/tasks/user
+    post /tasks/user -d "{\"text\": \"$*\", \"type\": \"habit\"}"
 }
 
 function habash_cast {
@@ -80,7 +82,7 @@ function habash_cast {
 }
 
 function habash_status {
-    get /user
+    get /user |jq .data.stats
 }
 
 action=$1
