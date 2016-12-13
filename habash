@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-function helpme {
+function habash_help {
     echo "Welcome to Habash!"
     echo ""
     echo "This is a very basic bash script to ease contacting Habitica on the command line. It is essentially a basic wrapper around curl, with some extra commands for ease of use."
