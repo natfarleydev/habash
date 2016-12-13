@@ -10,12 +10,9 @@ function helpme {
     echo "habash up TASK_TEXT"
     echo "habash down TASK_TEXT"
     echo "habash createtodo TASK_TEXT"
+    echo "habash createhabit TASK_TEXT"
     # echo "habash post API_PATH [CURL_ARGUMENTS]"
     # echo "habash get API_PATH [CURL_ARGUMENTS]"
-    echo ""
-    echo ""
-    echo "WARNING:"
-    echo "This script does not check inputs; if you do something like \"habash rm -rf *\", this script will execute \"rm -rf *\". You have been warned!"
 }
 
 # Basic commands
@@ -60,7 +57,7 @@ function habash_up {
 }
 
 function habash_down {
-    post /tasks/$(ghabash_etidoftask $*)/score/down
+    post /tasks/$(habash_getidoftask $*)/score/down
 }
 
 function habash_createtodo {
