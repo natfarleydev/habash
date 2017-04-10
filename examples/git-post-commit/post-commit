@@ -1,0 +1,4 @@
+#!/usr/bin/bash
+
+# Upvote a habit named 'Commit code to git' on commit.
+habash up Commit code to git
