@@ -50,7 +50,7 @@ function del {
 
 function habash_getidoftask {
     # TODO get this to return just the id or a failed flag
-    get tasks/user | grep -Po '"text":.*?"id":.*?,' | grep "$*" | grep -Po '"id":".*?"' | grep -Po '[-a-f0-9]{36}'
+    get tasks/user | grep -Po '"text":.*?"id":.*?,' | grep "\"$*\"" | grep -Po '"id":".*?"' | grep -Po '[-a-f0-9]{36}'
 }
 
 function habash_deletetask {
