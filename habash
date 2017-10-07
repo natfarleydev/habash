@@ -76,3 +76,4 @@ function habash_createhabit {
 action=$1
 shift
 habash_${action} $@ 2>/dev/null ||echo "$action is not a valid action"
+printf "\n"
