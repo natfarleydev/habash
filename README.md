@@ -20,3 +20,8 @@ habash down TASK_TEXT
 habash createtodo TASK_TEXT
 habash createhabit TASK_TEXT
 ```
+
+## Developer's guide
+The aim of this project is to provide an interface to Habitica on any computer with bash and ordinary GNU utils (e.g. a Openstack machine, a work machine, etc.). As such, it should not have dependencies that are not likely to be installed on a fresh Linux install.
+
+Any pull requests that follow the spirit of the above paragraph are _very_ likely to be accepted. 
