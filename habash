@@ -1,43 +1,70 @@
 #!/usr/bin/env bash
 
-function habash_help {
-    echo "Welcome to Habash!"
-    echo ""
-    echo "This is a very basic bash script to ease contacting Habitica on the command line. It is essentially a basic wrapper around curl, with some extra commands for ease of use."
-    echo ""
-    echo "Available commands:"
-    echo "habash getidoftask TASK_TEXT"
-    echo "habash up TASK_TEXT"
-    echo "habash down TASK_TEXT"
-    echo "habash deletetask TASK_TEXT"
-    echo "habash createtodo TASK_TEXT"
-    echo "habash createhabit TASK_TEXT"
-    # echo "habash post API_PATH [CURL_ARGUMENTS]"
-    # echo "habash get API_PATH [CURL_ARGUMENTS]"
+PROGRAM=$(basename $0)
+VERSION="1.0.0"
+
+if [ "${DEBUG}" == "1" ]
+then
+	set -x
+fi
+
+habash_help()
+{
+	cat <<-HELP
+	Usage: ${PROGRAM} <command> [command arguments]
+	       ${PROGRAM} up "Floss"
+	       ${PROGRAM} createtodo "Buy milk"
+
+	Contacts Habitica API through cURL with minimal dependencies.
+
+	Commands available:
+	    getidoftask <TASK TEXT>
+	    up <TASK_TEXT
+	    down <TASK_TEXT>
+	    deletetask <TASK_TEXT>
+	    createtodo <TASK_TEXT>
+	    createhabit <TASK_TEXT>
+	    post <API_PATH> [CURL_ARGUMENTS]
+	    get <API_PATH> [CURL_ARGUMENTS]
+	
+	Post issues at https://github.com/nasfarley88/habash/issues
+	HELP
 }
 
 # Basic commands
 #
 # These commands should be used to create more complex commands. They are left
 # available to the user to do complex things with the api
-function hcurl {
+
+# Usage: hcurl GET tasks/user
+hcurl()
+{
+	method=$1
+	url_path=$2
     # Basic curl wrapper for habitica
-    curl -s -X $1 -H "x-api-key: $HABITICA_TOKEN" -H "x-api-user: $HABITICA_UUID" https://habitica.com/api/v3/$2
+    curl -s -H "x-api-key: $HABITICA_TOKEN" \
+		-H "x-api-user: $HABITICA_UUID" \
+		-X $method \
+		https://habitica.com/api/v3/$url_path
 }
 
-function get {
+get()
+{
     hcurl GET $1
 }
 
-function post {
+post()
+{
     hcurl POST $1
 }
 
-function put {
+put()
+{
     hcurl PUT $1
 }
 
-function del {
+del()
+{
     hcurl DELETE $1
 }
 
@@ -48,32 +75,54 @@ function del {
 # These commands are for convenience. They should use the basic commands above
 # as much as possible.
 
-function habash_getidoftask {
-    # TODO get this to return just the id or a failed flag
-    get tasks/user | grep -Po '"text":.*?"id":.*?,' | grep "\"$*\"" | grep -Po '"id":".*?"' | grep -Po '[-a-f0-9]{36}'
+# TODO get this to return just the id or a failed flag
+habash_getidoftask()
+{
+    get tasks/user \
+		| grep -Po '"text":.*?"id":.*?,' \
+		| grep "\"$*\"" \
+		| grep -Po '"id":".*?"' \
+		| grep -Po '[-a-f0-9]{36}'
 }
 
-function habash_deletetask {
+habash_deletetask()
+{
     del /tasks/$(habash_getidoftask $*)
 }
 
-function habash_up {
+habash_up()
+{
     post /tasks/$(habash_getidoftask $*)/score/up
 }
 
-function habash_down {
+habash_down()
+{
     post /tasks/$(habash_getidoftask $*)/score/down
 }
 
-function habash_createtodo {
-    curl -s -H "x-api-key: $HABITICA_TOKEN" -H "x-api-user: $HABITICA_UUID" -H "Content-Type: application/json" -X POST -d "{\"text\": \"$*\", \"type\": \"todo\"}" https://habitica.com/api/v3/tasks/user
+habash_createtodo()
+{
+    curl -s \
+		-H "x-api-key: $HABITICA_TOKEN" \
+		-H "x-api-user: $HABITICA_UUID" \
+		-H "Content-Type: application/json" \
+		-X POST \
+		-d "{\"text\": \"$*\", \"type\": \"todo\"}" \
+		https://habitica.com/api/v3/tasks/user
 }
 
-function habash_createhabit {
-    curl -s -H "x-api-key: $HABITICA_TOKEN" -H "x-api-user: $HABITICA_UUID" -H "Content-Type: application/json" -X POST -d "{\"text\": \"$*\", \"type\": \"habit\"}" https://habitica.com/api/v3/tasks/user
+habash_createhabit()
+{
+    curl -s \
+		-H "x-api-key: $HABITICA_TOKEN" \
+		-H "x-api-user: $HABITICA_UUID" \
+		-H "Content-Type: application/json" \
+		-X POST \
+		-d "{\"text\": \"$*\", \"type\": \"habit\"}" \
+		https://habitica.com/api/v3/tasks/user
 }
 
 action=$1
 shift
-habash_${action} $@ 2>/dev/null ||echo "$action is not a valid action"
+habash_${action} $@ 2>/dev/null || echo "$action is not a valid action"
 printf "\n"
