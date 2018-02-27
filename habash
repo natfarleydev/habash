@@ -18,67 +18,34 @@ habash_help()
 	Contacts Habitica API through cURL with minimal dependencies.
 
 	Commands available:
-	    getidoftask <TASK TEXT>
-	    up <TASK_TEXT
+	    id <TASK TEXT>
+	    up <TASK_TEXT>
 	    down <TASK_TEXT>
-	    deletetask <TASK_TEXT>
-	    createtodo <TASK_TEXT>
-	    createhabit <TASK_TEXT>
-	    post <API_PATH> [CURL_ARGUMENTS]
-	    get <API_PATH> [CURL_ARGUMENTS]
+	    delete <TASK_TEXT>
+	    todo <TASK_TEXT>
+	    habit <TASK_TEXT>
 	
 	Post issues at https://github.com/nasfarley88/habash/issues
 	HELP
 }
 
-# Basic commands
-#
-# These commands should be used to create more complex commands. They are left
-# available to the user to do complex things with the api
-
 # Usage: hcurl GET tasks/user
 hcurl()
 {
-	method=$1
-	url_path=$2
+	local method=$1
+	local url_path=$2
+
     # Basic curl wrapper for habitica
     curl -s -H "x-api-key: $HABITICA_TOKEN" \
 		-H "x-api-user: $HABITICA_UUID" \
 		-X $method \
+		${curl_opt} \
 		https://habitica.com/api/v3/$url_path
 }
 
-get()
-{
-    hcurl GET $1
-}
-
-post()
-{
-    hcurl POST $1
-}
-
-put()
-{
-    hcurl PUT $1
-}
-
-del()
-{
-    hcurl DELETE $1
-}
-
-# End of basic commands
-
-# Composite commands
-#
-# These commands are for convenience. They should use the basic commands above
-# as much as possible.
-
-# TODO get this to return just the id or a failed flag
 habash_getidoftask()
 {
-    get tasks/user \
+    hcurl GET tasks/user \
 		| grep -Po '"text":.*?"id":.*?,' \
 		| grep "\"$*\"" \
 		| grep -Po '"id":".*?"' \
@@ -87,17 +54,17 @@ habash_getidoftask()
 
 habash_deletetask()
 {
-    del /tasks/$(habash_getidoftask $*)
+    hcurl DELETE /tasks/$(habash_getidoftask $*)
 }
 
 habash_up()
 {
-    post /tasks/$(habash_getidoftask $*)/score/up
+    hcurl POST /tasks/$(habash_getidoftask $*)/score/up
 }
 
 habash_down()
 {
-    post /tasks/$(habash_getidoftask $*)/score/down
+    hcurl POST /tasks/$(habash_getidoftask $*)/score/down
 }
 
 habash_createtodo()
@@ -122,7 +89,52 @@ habash_createhabit()
 		https://habitica.com/api/v3/tasks/user
 }
 
-action=$1
-shift
-habash_${action} $@ 2>/dev/null || echo "$action is not a valid action"
+# Usage: habash_main <action> [optional arguments]
+habash_main()
+{
+	local action=$1
+	shift
+
+	if [ -z "${HABITICA_TOKEN}" ]
+	then
+		echo "Please, make the following environment variable available: HABITICA_TOKEN" 1>&2
+		exit 2
+	fi
+
+	if [ -z "${HABITICA_UUID}" ]
+	then
+		echo "Please, make the following environment variable available: HABITICA_UUID" 1>&2
+		exit 2
+	fi
+
+	case "${action}" in
+		getidoftask|id)
+			habash_getidoftask $@
+			;;
+		createtodo|todo)
+			habash_createtodo $@
+			;;
+		deletetask|delete)
+			habash_deletetask $@
+			;;
+		createhabit|habit)
+			habash_createhabit $@
+			;;
+		up)
+			habash_up $@
+			;;
+		down)
+			habash_down $@
+			;;
+		help|-h|--help)
+			habash_help
+			;;
+		*)
+			echo "${action} is not a valid action (use'${PROGRAM} help' for more information)."
+			exit 2
+			;;
+	esac
+}
+
+habash_main $@
 printf "\n"
