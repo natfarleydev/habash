@@ -32,15 +32,17 @@ habash_help()
 # Usage: hcurl GET tasks/user
 hcurl()
 {
-	local method=$1
-	local url_path=$2
+    local method=$1
+    local url_path=$2
 
     # Basic curl wrapper for habitica
-    curl -s -H "x-api-key: $HABITICA_TOKEN" \
-		-H "x-api-user: $HABITICA_UUID" \
-		-X $method \
-		${curl_opt} \
-		https://habitica.com/api/v3/$url_path
+    curl -s \
+         -X $method \
+         -d "" \
+         -H "Content-Type:application/json" \
+         -H "x-api-key: $HABITICA_TOKEN" \
+         -H "x-api-user: $HABITICA_UUID" \
+         https://habitica.com/api/v3/$url_path
 }
 
 habash_getidoftask()
