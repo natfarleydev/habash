@@ -9,7 +9,7 @@ Usage is simple:
 $ habash help
 Usage: habash <command> [command arguments]
        habash up "Floss"
-       habash createtodo "Buy milk"
+       habash create-todo "Buy milk"
 
 Contacts Habitica API through cURL with minimal dependencies.
 

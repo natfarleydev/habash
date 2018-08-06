@@ -13,7 +13,7 @@ habash_help()
 	cat <<-HELP
   Usage: habash <command> [command arguments]
       habash up "Floss"
-      habash createtodo "Buy milk"
+      habash create-todo "Buy milk"
 
   Contacts Habitica API through cURL with minimal dependencies.
 
