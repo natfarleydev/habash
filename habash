@@ -11,22 +11,25 @@ fi
 habash_help()
 {
 	cat <<-HELP
-	Usage: ${PROGRAM} <command> [command arguments]
-	       ${PROGRAM} up "Floss"
-	       ${PROGRAM} createtodo "Buy milk"
+  Usage: habash <command> [command arguments]
+      habash up "Floss"
+      habash createtodo "Buy milk"
 
-	Contacts Habitica API through cURL with minimal dependencies.
+  Contacts Habitica API through cURL with minimal dependencies.
 
-	Commands available:
-	    ls
-	    id <TASK TEXT>
-	    up <TASK_TEXT>
-	    down <TASK_TEXT>
-	    delete <TASK_TEXT>
-	    todo <TASK_TEXT>
-	    habit <TASK_TEXT>
-	
-	Post issues at https://github.com/nasfarley88/habash/issues
+  Commands available (aliases separated with |):
+      ls
+      id <TASK TEXT>
+      up|done <TASK_TEXT>
+      down <TASK_TEXT>
+      delete <TASK_TEXT>
+      create-todo|ct <TASK_TEXT>
+      create-habit|ch <TASK_TEXT>
+
+  e.g.
+      habash done Use habash on the command line
+
+  Post issues at https://github.com/nasfarley88/habash/issues
 	HELP
 }
 
@@ -122,16 +125,16 @@ habash_main()
 		getidoftask|id)
 			habash_getidoftask $@
 			;;
-		createtodo|todo)
+		ct|create-todo|createtodo|todo)
 			habash_createtodo $@
 			;;
 		deletetask|delete)
 			habash_deletetask $@
 			;;
-		createhabit|habit)
+		ch|create-habit|createhabit|habit)
 			habash_createhabit $@
 			;;
-		up)
+		'done'|up)
 			habash_up $@
 			;;
 		down)

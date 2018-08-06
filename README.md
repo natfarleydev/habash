@@ -13,14 +13,17 @@ Usage: habash <command> [command arguments]
 
 Contacts Habitica API through cURL with minimal dependencies.
 
-Commands available:
+Commands available (aliases separated with |):
     ls
     id <TASK TEXT>
-    up <TASK_TEXT>
+    up|done <TASK_TEXT>
     down <TASK_TEXT>
     delete <TASK_TEXT>
-    todo <TASK_TEXT>
-    habit <TASK_TEXT>
+    create-todo|ct <TASK_TEXT>
+    create-habit|ch <TASK_TEXT>
+    
+e.g.
+    habash done Use habash on the command line
 
 Post issues at https://github.com/nasfarley88/habash/issues
 ```
