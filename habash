@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 PROGRAM=$(basename $0)
-VERSION="1.0.0"
+VERSION="1.1.0"
 
 if [ "${DEBUG}" == "1" ]
 then
@@ -19,6 +19,7 @@ habash_help()
 
   Commands available (aliases separated with |):
       ls
+      cast <SPELL NAME> <(optional) TARGET ID>
       id <TASK TEXT>
       up|done <TASK_TEXT>
       down <TASK_TEXT>
@@ -47,6 +48,16 @@ hcurl()
          -H "x-api-key: $HABITICA_TOKEN" \
          -H "x-api-user: $HABITICA_UUID" \
          https://habitica.com/api/v3/$url_path
+}
+
+habash_cast()
+{
+    if [ -z "$2" ]
+    then
+        hcurl POST /user/class/cast/$1
+    else
+        hcurl POST "/user/class/cast/$1?targetId=$2"
+    fi
 }
 
 habash_ls()
@@ -122,6 +133,9 @@ habash_main()
 		ls)
 			habash_ls $@
 			;;
+		cast)
+			  habash_cast $@
+			  ;;
 		getidoftask|id)
 			habash_getidoftask $@
 			;;
