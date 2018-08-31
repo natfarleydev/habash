@@ -19,6 +19,8 @@ habash_help()
 
   Commands available (aliases separated with |):
       ls
+      content # The user should cache this where possible!
+      sell <TYPE> <ITEM KEY>
       cast <SPELL NAME> <(optional) TARGET ID>
       id <TASK TEXT>
       up|done <TASK_TEXT>
@@ -58,6 +60,16 @@ habash_cast()
     else
         hcurl POST "/user/class/cast/$1?targetId=$2"
     fi
+}
+
+habash_sell()
+{
+    hcurl POST /user/sell/$1/$2
+}
+
+habash_content()
+{
+    hcurl GET /content
 }
 
 habash_ls()
@@ -130,12 +142,18 @@ habash_main()
 	fi
 
 	case "${action}" in
+    sell)
+      habash_sell $@
+      ;;
+    content)
+      habash_content $@
+      ;;
 		ls)
 			habash_ls $@
 			;;
 		cast)
-			  habash_cast $@
-			  ;;
+      habash_cast $@
+      ;;
 		getidoftask|id)
 			habash_getidoftask $@
 			;;
