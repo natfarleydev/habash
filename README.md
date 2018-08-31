@@ -57,6 +57,34 @@ done
 And all remaining mana will drain using the spell 'Burst of Flames' on the task
 'Morning prayer'.
 
+### Selling common eggs
+
+In the `./examples` directory there is a script for selling common eggs
+(`sell-common-eggs.sh`). Simply run it and the script will sell all your common
+eggs.
+
+Completed your stable already? Set up a cron job and watch the gold flow in!
+
+```bash
+#!/usr/bin/env bash
+
+export EGGS="Wolf TigerCub PandaCub LionCub Fox FlyingPig Dragon Cactus BearCub"
+
+for egg in $EGGS
+do
+    echo "Selling the '$egg' egg"
+    while true
+    do if habash sell eggs $egg | grep -Po '"success":false' > /dev/null
+       then
+           echo "Sold out!"
+           break
+       else echo "Sold 1 '$egg' egg."
+       fi
+    done
+done
+
+```
+
 ## Developer's guide
 The aim of this project is to provide an interface to Habitica on any computer with bash and ordinary GNU utils (e.g. a Openstack machine, a work machine, etc.). As such, it should not have dependencies that are not likely to be installed on a fresh Linux install.
 
