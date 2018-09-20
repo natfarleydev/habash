@@ -19,6 +19,7 @@ habash_help()
 
   Commands available (aliases separated with |):
       ls
+      partychat
       content # The user should cache this where possible!
       sell <TYPE> <ITEM KEY>
       cast <SPELL NAME> <(optional) TARGET ID>
@@ -75,6 +76,11 @@ habash_content()
 habash_ls()
 {
     hcurl GET /tasks/user | grep -Po '(?<="text":").*?(?=")'
+}
+
+habash_partychat()
+{
+    hcurl GET /groups/party/chat
 }
 
 habash_getidoftask()
@@ -151,6 +157,9 @@ habash_main()
 		ls)
 			habash_ls $@
 			;;
+		partychat)
+			  habash_partychat $@
+			  ;;
 		cast)
       habash_cast $@
       ;;
