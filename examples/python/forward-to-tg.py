@@ -38,7 +38,7 @@ logger = logging.getLogger(__name__)
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Forward Habitica chat to Telegram.')
-    parser.add_argument('--print-only', type='store_true', default=False,
+    parser.add_argument('--print-only', action='store_true', default=False,
                         help='Only print the messages, do not send them to telegram.')
     parser.add_argument('--habitica-tg-bot-token', type=str,
                         default=os.environ['HABITICA_TG_BOT_TOKEN'],
@@ -51,6 +51,8 @@ def parse_arguments():
     parser.add_argument('--habitica-uuid', type=str,
                         default=os.environ['HABITICA_UUID'],
                         help='Habitica UUID')
+
+    return parser.parse_args()
 
 
 def main(parsed):
