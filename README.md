@@ -14,7 +14,7 @@ Usage: habash <command> [command arguments]
 Contacts Habitica API through cURL with minimal dependencies.
 
 Commands available (aliases separated with |):
-    ls
+    ls <(optional) TYPE (habits|dailys|todos)>
     cast <SPELL NAME> <(optional) TARGET ID>
     id <TASK TEXT>
     up|done <TASK_TEXT>
