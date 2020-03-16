@@ -18,7 +18,7 @@ habash_help()
   Contacts Habitica API through cURL with minimal dependencies.
 
   Commands available (aliases separated with |):
-      ls
+      ls <(optional) TYPE (habits|dailys|todos)>
       partychat
       content # The user should cache this where possible!
       sell <TYPE> <ITEM KEY>
