@@ -1,6 +1,6 @@
 # Maintainer: Shaarad Dalvi <dalvishaarad at gmail dot com>
 pkgname=habash
-pkgver=1.0.0
+pkgver=1.1.0
 pkgrel=1
 pkgdesc="A (very minimal) habitica terminal client written entirely in bash."
 arch=('any')
@@ -8,7 +8,7 @@ url="https://github.com/nasfarley88/habash"
 license=('custom:cc0')
 source=("$pkgname-$pkgver.tar.gz::$url/archive/v$pkgver.tar.gz")
 noextract=()
-sha512sums=('26426d3e541cbd62773f9e00bcdeeb777bb840f79efc29e61bb181c31292ff9357b8473a2b95652c0afb298700ddd33ac065af81861e325c3a41fe72888c97a5')
+sha512sums=('04d5a5567c6baecdfd925dd02fdf6afff7d066a6b860e53b23c6cd9cd87e60af948c68adac26673530e7e588094550fc5282395d497275818e244bd25a0cead0')
 validpgpkeys=()
 
 package() {
