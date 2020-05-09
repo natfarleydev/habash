@@ -18,7 +18,7 @@ habash_help()
   Contacts Habitica API through cURL with minimal dependencies.
 
   Commands available (aliases separated with |):
-      ls
+      ls <(optional) TYPE (habits|dailys|todos)>
       partychat
       content # The user should cache this where possible!
       sell <TYPE> <ITEM KEY>
@@ -75,7 +75,15 @@ habash_content()
 
 habash_ls()
 {
-    hcurl GET /tasks/user | grep -Po '(?<="text":").*?(?=")'
+    if [ "$1" = "dailys" ]; then
+        hcurl GET "/tasks/user?type=dailys" | grep -Po '(?<="text":").*?(?=")'
+    elif [ "$1" = "habits" ]; then
+        hcurl GET "/tasks/user?type=habits" | grep -Po '(?<="text":").*?(?=")'
+    elif [ "$1" = "todos" ]; then
+        hcurl GET "/tasks/user?type=todos" | grep -Po '(?<="text":").*?(?=")'
+    else
+        hcurl GET /tasks/user | grep -Po '(?<="text":").*?(?=")'
+    fi
 }
 
 habash_partychat()
